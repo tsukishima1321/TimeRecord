@@ -1,0 +1,96 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="index.css">
+    <link rel="stylesheet" type="text/css" href="body.css">
+    <title>时间记录</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="viewport" content="user-scalable=no" />
+</head>
+
+<body>
+    <div class="body">
+        <div class="searchBar">
+            <div class="box1">
+                <input id="input1" type="text" class="input" placeholder="记录者">
+            </div>
+            <div class="box2">
+                <input id="input2" type="text" class="input" placeholder="教室">
+            </div>
+            <div class="box3">
+                <input id="input3" type="text" class="input" placeholder="时间">
+            </div>
+        </div>
+    </div>
+    <div class="rd" onclick="startadd()">
+        记录
+    </div>
+    <table id="table">
+        <thead>
+            <tr>
+                <th>记录者</th>
+                <th>教室</th>
+                <th>时间区间</th>
+                <th>时间</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+    </div>
+</body>
+
+</html>
+
+<script>
+    var url = "https://8y393l3233.zicp.fun/api/";
+    var writer = "";
+    var classroom = "";
+    var timezone = "";
+
+    function addRow(w, c, tz, t) {
+        var table = document.getElementById("table");
+        var row = table.insertRow(-1);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        cell1.innerHTML = w;
+        cell2.innerHTML = c;
+        cell3.innerHTML = tz;
+        cell4.innerHTML = t;
+    }
+    function add() {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', url, true);
+        httpRequest.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        var obj = {
+            "method": "addRecord",
+            "classroom": classroom,
+            "writer": writer,
+            "timezone": timezone,
+        };
+        httpRequest.onload = function () {
+            var json = httpRequest.responseText;
+            var res = JSON.parse(json);
+            if (1) {
+                addRow(res["writer"], res["classroom"], res["timezone"], res["time"])
+            }
+        }
+        httpRequest.send(JSON.stringify(obj));
+    }
+    function startadd() {
+        writer = document.getElementById("input1").value;
+        classroom = document.getElementById("input2").value;
+        timezone = document.getElementById("input3").value;
+        add();
+    }
+</script>
