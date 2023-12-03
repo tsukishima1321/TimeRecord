@@ -81,9 +81,10 @@
         httpRequest.onload = function () {
             var json = httpRequest.responseText;
             var res = JSON.parse(json);
-            if (1) {
-                addRow(res["writer"], res["classroom"], res["timezone"], res["time"])
-            }
+            addRow(res["writer"], res["classroom"], res["timezone"], res["time"]);
+        }
+        httpRequest.onerror = function(){
+            addRow("", "","", "服务器错误");
         }
         httpRequest.send(JSON.stringify(obj));
     }
